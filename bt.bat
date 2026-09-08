@@ -322,6 +322,7 @@ goto main
 
 :cleanup
 
+if "%temp%"=="" goto main
 echo %c%[33mB%c%[31mT%c%[0m: This will delete junk/temp files.
 echo.
 echo Are you sure? (Y/N)
@@ -443,6 +444,10 @@ echo  -f        Set Don't Fragment flag in packet (IPv4-only).
 echo  -n count  Number of echo requests to send (1-255).
 echo  -4        Force using IPv4.
 echo  -6        Force using IPv6.
+
+echo Press any key to go back . . .
+pause
+goto main
 
 :exit
 exit
