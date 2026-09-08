@@ -113,7 +113,7 @@ Suggestions, bug reports, and improvements are welcome. Since this is an alpha p
 
 ## License
 
-No license has been selected yet.
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
