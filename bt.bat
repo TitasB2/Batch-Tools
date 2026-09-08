@@ -1,8 +1,10 @@
 @echo off
 
-title BT v0.0.1 alpha
+title BT v0.0.2 alpha
 
-::                        v0.0.1 alpha
+:: There can be typos. My english isin't the best
+
+::                        v0.0.2 alpha
 
 :: --------------------------------------------------------------------
 
@@ -17,7 +19,7 @@ title BT v0.0.1 alpha
 
 :: If you detect any bugs please report them to me :
 
-:: GitHub project: https://github.com/TitasB2/Batch-Tools
+:: GitHub project: https://github.com/TitasB2/Batch-Tools/issues/new (this takes to creating a new issue directly)
 :: Github account: https://github.com/TitasB2
 
 :: These are just for copying I am lazy
@@ -40,7 +42,13 @@ chcp 65001 >nul
 :: Make a variuble for colors
 for /f %%a in ('echo prompt $E^| cmd') do set "c=%%a"
 
+powershell "Start-Sleep -Seconds 0"
 :main
+
+set "inp="
+set "cmd="
+set "arg="
+
 cls
 
 echo ===============================================
@@ -119,6 +127,7 @@ if "%inp%"=="ping -n" goto ping-n
 if "%inp%"=="ping -6" goto ping6
 if "%inp%"=="ping -4" goto ping4
 if "%inp%"=="ping /?" goto ping?
+if "%inp%"=="info" goto info
 :: if "%inp%"=="speedtest" speedtest & pause & goto main
 :: if "%inp%"=="spdtest" speedtest & pause & goto main
 :: if "%inp%"=="spdtst" speedtest & pause & goto main
@@ -136,7 +145,7 @@ if "!cmd!"=="open" (
     if exist "!arg!" (
         start "" "!arg!"
     ) else (
-        echo %c%[33mB%c%[31mT%c%[0m: %c%[31mFile or folder not found%c%[0m
+        echo %c%[33mB%c%[31mT%c%[0m: %c%[31mFile or folder not found in current directory%c%[0m
     )
     pause
     goto main
@@ -155,6 +164,25 @@ if "%inp%"=="ren" (
     set /p oldname=Enter file/folder to rename: 
     set /p newname=Enter new name: 
     ren "!oldname!" "!newname!"
+    goto main
+)
+
+:: cd
+
+if "!cmd!"=="cd" (
+    if "!arg!"=="" (
+        echo %c%[33mB%c%[31mT%c%[0m: Usage: cd ^<path^>
+    ) else (
+        if exist "!arg!" (
+            cd /d "!arg!"
+            echo Changed directory to: %cd%
+        ) else (
+            echo %c%[33mB%c%[31mT%c%[0m: %c%[31mFolder not found%c%[0m: !arg!
+            powershell -Command "& { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Error; $notify.Visible = $true; $notify.ShowBalloonTip(5000, 'Batch Tools', 'Directory not found.', [System.Windows.Forms.ToolTipIcon]::Error); Start-Sleep -Seconds 1; $notify.Dispose() }"
+
+        )
+    )
+    pause
     goto main
 )
 
@@ -229,6 +257,9 @@ echo ping: ping an ipv4 adress
 :: ping /?
 echo ping /?: displays help for ping
 
+:: info
+echo info: displays all the information about BT
+
 echo.
 echo %c%[31m^* - didin't test yet%c%[0m
 echo Press any key to go back . . .
@@ -240,9 +271,44 @@ goto main
 
 echo.
 echo Current %c%[33mB%c%[31mT%c%[0m version
-echo v0.0.1 alpha
+echo v0.0.2 alpha
 
 echo Press any key to go back...
+pause >nul
+goto main
+
+:info
+cls
+
+echo.
+echo There can be typos. My english isin't the best
+echo.
+echo                         v0.0.2 alpha
+echo.
+echo --------------------------------------------------------------------
+echo.
+echo       #   # ##### #   #    ##### #   # ##### ####  ##### # 
+echo       #   # #      # #       #   #   # #     #   # #     # 
+echo       ##### ####    #        #   ##### ####  ####  ####  # 
+echo       #   # #       #        #   #   # #     #  #  #       
+echo       #   # #####   #        #   #   # ##### #   # ##### #
+echo                 Trust me there are no viruses
+echo.
+echo ---------------------------------------------------------------------
+echo If you don't want to use or don't trust this tool you can close this window
+echo.
+echo If you detect any bugs please report them to me :
+echo.
+echo GitHub project: https://github.com/TitasB2/Batch-Tools/issues/new (this takes to creating a new issue directly)
+echo Github account: https://github.com/TitasB2
+echo.
+echo Read README.md, go to https://github.com/TitasB2/Batch-Tools/ or contact me https://github.com/TitasB2/ for more information.
+echo.
+echo Please star my project if you like it I put hard work
+echo https://github.com/TitasB2/Batch-Tools/
+echo.
+echo Made with %c%[31m♥%c%[0m by Titas
+echo Press any key to go back . . .
 pause >nul
 goto main
 
@@ -277,6 +343,7 @@ goto main
 del /q /f /s %temp%\*
 echo.
 echo Done.
+powershell -Command "& { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(5000, 'Batch Tools', 'Done cleaning temp files.', [System.Windows.Forms.ToolTipIcon]::Info); Start-Sleep -Seconds 1; $notify.Dispose() }"
 echo Press any key to go back . . .
 pause >nul
 goto main
@@ -284,6 +351,7 @@ goto main
 :cleanup.cancel
 
 echo Cleanup canceled.
+powershell -Command "& { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Error; $notify.Visible = $true; $notify.ShowBalloonTip(5000, 'Batch Tools', 'Cleanup canceled.', [System.Windows.Forms.ToolTipIcon]::Error); Start-Sleep -Seconds 1; $notify.Dispose() }"
 echo Press any key to go back . . .
 pause >nul
 goto main
