@@ -15,7 +15,10 @@ Use them only if you understand what they do, and **do not run this script as Ad
 
 If you’re unsure, avoid using any command that mentions *logout*, *shutdown*, *restart*, *hibernate*, *lock*, or *sleep*.
 
-Please report any bugs you find to me.
-Thank you.
+## Reporting issues
+
+Please report any bugs or issues you find on the [Issues](https://github.com/TitasB2/Batch-Tools/issues) page or via my [GitHub profile](https://github.com/TitasB2).
+
+---
 
 ###### Made with ❤️ by Titas
