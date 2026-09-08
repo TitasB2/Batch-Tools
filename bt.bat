@@ -322,7 +322,6 @@ goto main
 
 :cleanup
 
-if "%temp%"=="" goto main
 echo %c%[33mB%c%[31mT%c%[0m: This will delete junk/temp files.
 echo.
 echo Are you sure? (Y/N)
@@ -341,7 +340,16 @@ goto main
 
 :cleanup.continue
 
-del /q /f /s %temp%\*
+if not "%TEMP%"=="" (
+    del /q /f /s "%TEMP%\*"
+) else (
+    echo %c%[33mB%c%[31mT%c%[0m: %c%[31mTEMP is not defined or empty%c%[0m >&2
+    powershell -Command "& { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(5000, 'Batch Tools', 'TEMP is not defined or empty.', [System.Windows.Forms.ToolTipIcon]::Info); Start-Sleep -Seconds 1; $notify.Dispose() }"
+    echo Press any key to go back . . . 
+    pause
+    goto main
+)
+
 echo.
 echo Done.
 powershell -Command "& { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(5000, 'Batch Tools', 'Done cleaning temp files.', [System.Windows.Forms.ToolTipIcon]::Info); Start-Sleep -Seconds 1; $notify.Dispose() }"
