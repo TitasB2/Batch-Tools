@@ -4,7 +4,7 @@
 
 Batch Tools, or **BT**, is a `.bat` script that provides quick access to commonly used CMD commands and basic Windows system utilities through a simple command menu.
 
-> **Current version:** `v0.0.1 alpha`  
+> **Current version:** `v0.0.2 alpha`  
 > This project is still in early development, so bugs and unfinished features are expected.
 
 ## Features
