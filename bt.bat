@@ -140,7 +140,7 @@ echo        cookies-agreement.vbs
 
 powershell "Start-Sleep -Milliseconds 15"
 
-wscript.exe "%~dp0Files\vbs.scripts\cookies\cookies-agreement.vbs"
+wscript.exe "%~dp0\cookies-agreement.vbs"
 echo            [==========]
 echo        cookies-agreement.vbs
 echo.
