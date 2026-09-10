@@ -1,28 +1,34 @@
 @echo off
 
-title BT v0.0.2 alpha
+::                                                    ____ _____ 
+::                                                   | __ )_   _|
+::                                                   |  _ \ | |  
+::                                                   | |_) || |  
+::                                                   |____/ |_|  
+
+title BT v0.0.3 alpha
 
 :: There can be typos. My english isin't the best
 
-::                        v0.0.2 alpha
+::                                                 v0.0.3 alpha
 
-:: --------------------------------------------------------------------
+::                    oo____oo_ooooooo_oo____oo___oooooooo_oo____oo_ooooooo_ooooooo___ooooooo_oo_
+::                    oo____oo_oo______oo____oo______oo____oo____oo_oo______oo____oo__oo______oo_
+::                    oo____oo_oooo_____oo__oo_______oo____oo____oo_oooo____oo____oo__oooo____oo_
+::                    oooooooo_oo_________oo_________oo____oooooooo_oo______ooooooo___oo______oo_
+::                    oo____oo_oo_________oo_________oo____oo____oo_oo______oo____oo__oo_________
+::                    oo____oo_ooooooo____oo_________oo____oo____oo_ooooooo_oo_____oo_ooooooo_oo_
+::                    ________________________________________________________________________oo_
 
-::       #   # ##### #   #    ##### #   # ##### ####  ##### # 
-::       #   # #      # #       #   #   # #     #   # #     # 
-::       ##### ####    #        #   ##### ####  ####  ####  # 
-::       #   # #       #        #   #   # #     #  #  #       
-::       #   # #####   #        #   #   # ##### #   # ##### #
-::                Trust me there are no viruses
-
-:: ---------------------------------------------------------------------
+::                                        Trust me there are no viruses
 
 :: If you detect any bugs please report them to me :
 
 :: GitHub project: https://github.com/TitasB2/Batch-Tools/issues/new (this takes to creating a new issue directly)
-:: Github account: https://github.com/TitasB2
+:: My Github account: https://github.com/TitasB2
 
-:: These are just for copying I am lazy
+
+:: These are just for copying I am lazy and random other stuff
 :: And I don't really wanna waste time
 
 REM if "%inp%"==""
@@ -42,7 +48,119 @@ chcp 65001 >nul
 :: Make a variuble for colors
 for /f %%a in ('echo prompt $E^| cmd') do set "c=%%a"
 
-powershell "Start-Sleep -Seconds 0"
+echo LOADING... [          ]
+echo               bt.cfg
+powershell "Start-Sleep -Milliseconds 1"
+
+:: Load config if it exists
+set "CONFIG=%~dp0bt.cfg"
+
+if exist "%CONFIG%" (
+    for /f "usebackq eol=# tokens=1,* delims==" %%A in ("%CONFIG%") do (
+        set "%%A=%%B"
+    )
+) else (
+    echo %c%[31mConfig file not found%c%[0m: "%CONFIG%"
+    goto main
+)
+
+if "!BT_VERSION!"=="0.0.3" (
+    goto pass
+) else (
+    echo %c%[31mThe versions don't match from bt.cfg%c%[0m
+    echo %c%[31mPlease change it in bt.cfg to the current one. Or reinstall BT%c%[0m
+    echo.
+    echo %c%[31mSolution: change the version in bt.cfg to the current%c%[0m
+    echo.
+    echo Press any key to exit . . .
+    pause >nul
+    goto :exit
+)
+:pass
+
+echo            [==        ]
+echo               bt.cfg
+
+:: Defaults
+:: if not defined BT_USE_COLORS set "BT_USE_COLORS=1"
+:: if not defined BT_SKIN set "BT_SKIN=default"
+if not defined BT_PROMPT_SEP set "BT_PROMPT_SEP=>"
+:: if not defined BT_PROMPT_PREFIX set "BT_PROMPT_PREFIX="
+:: if not defined BT_START_DIR set "BT_START_DIR="
+echo            [====      ]
+echo               bt.cfg
+
+:: Startup directory
+if defined BT_START_DIR cd /d "%BT_START_DIR%"
+
+echo            [======    ]
+echo               bt.cfg
+powershell "Start-Sleep -Milliseconds 1"
+
+:: Colors & skin
+:: if "!BT_USE_COLORS!"=="1" (
+::    for /f %%a in ('echo prompt $E^| cmd') do set "c=%%a"
+
+::     if /i "!BT_SKIN!"=="default" (
+::         set "color1=33"
+::         set "color2=31"
+::     ) else if /i "!BT_SKIN!"=="cyan" (
+::         set "color1=36"
+::         set "color2=37"
+::     ) else if /i "!BT_SKIN!"=="green" (
+::         set "color1=32"
+::         set "color2=37"
+::     ) else if /i "!BT_SKIN!"=="purple" (
+::         set "color1=35"
+::         set "color2=37"
+::     ) else if /i "!BT_SKIN!"=="red" (
+::         set "color1=31"
+::         set "color2=33"
+::     ) else if /i "!BT_SKIN!"=="blue" (
+::         set "color1=34"
+::         set "color2=36"
+::     ) else (
+::         set "color1=33"
+::         set "color2=31"
+::     )
+:: ) else (
+::     set "c="
+::     set "color1="
+::     set "color2="
+:: )
+echo LOADING... [==========]
+echo               bt.cfg
+echo.
+powershell "Start-Sleep -Milliseconds 500"
+
+@echo off
+
+echo LOADING... [          ]
+echo        cookies-agreement.vbs
+
+powershell "Start-Sleep -Milliseconds 15"
+
+wscript.exe "%~dp0Files\vbs.scripts\cookies\cookies-agreement.vbs"
+echo            [==========]
+echo        cookies-agreement.vbs
+echo.
+:: powershell "Start-Sleep -Milliseconds 1"
+
+echo LOADING... [          ]
+echo          DO_NOT_DELETE.txt
+
+powershell "Start-Sleep -Milliseconds 1"
+
+if errorlevel 1 (
+    echo Cookie agreement declined.
+)
+echo            [==========]
+echo          DO_NOT_DELETE.txt
+
+:: powershell "Start-Sleep -Milliseconds 1"
+
+echo Agreement accepted or already confirmed.
+
 :main
 
 set "inp="
@@ -58,7 +176,13 @@ echo                  %c%[33mBatch %c%[31mTools%c%[0m
 echo. 
 echo ===============================================
 echo.
-set /p inp=%cd%\BT^>
+if "!BT_PROMPT_PREFIX!"=="" (
+    set "baseText=%cd%\BT"55u
+) else (
+    set "baseText=!BT_PROMPT_PREFIX!"
+)
+set "promptText=!baseText!!BT_PROMPT_SEP! "
+set /p inp=!promptText!
 
 if "%inp%"=="help" goto help
 if "%inp%"=="BT" goto help
@@ -78,17 +202,66 @@ if "%inp%"=="lock" rundll32.exe user32.dll,LockWorkStation & pause & goto main
 if "%inp%"=="lockpc" rundll32.exe user32.dll,LockWorkStation & pause & goto main
 if "%inp%"=="lkpc" rundll32.exe user32.dll,LockWorkStation & pause & goto main
 if "%inp%"=="lk" rundll32.exe user32.dll,LockWorkStation & pause & goto main
-if "%inp%"=="turnoff" shutdown /t 0 & pause & goto main
-if "%inp%"=="trnoff" shutdown /t 0 & pause & goto main
-if "%inp%"=="shutdown" shutdown /t 0 & pause & goto main
-if "%inp%"=="shtdwn"  shutdown /t 0 & pause & goto main
+if "%inp%"=="turnoff" (
+    echo Are you sure? This will shutdown your PC ^(Y/N^)
+    set /p dwn=
+    if "%dwn%"=="Y" shutdown /t 0
+    if "%dwn%"=="y" shutdown /t 0
+    if "%dwn%"=="N" goto main
+    if "%dwn%"=="n" goto main
+) 
+if "%inp%"=="trnoff" (
+    echo Are you sure? This will shutdown your PC ^(Y/N^)
+    set /p dwn1=
+    if "%dwn1%"=="Y" shutdown /t 0
+    if "%dwn1%"=="y" shutdown /t 0
+    if "%dwn1%"=="N" goto main
+    if "%dwn1%"=="n" goto main
+) 
+if "%inp%"=="shutdown" (
+    echo Are you sure? This will shutdown your PC ^(Y/N^)
+    set /p dwn2=
+    if "%dwn2%"=="Y" shutdown /t 0
+    if "%dwn2%"=="y" shutdown /t 0
+    if "%dwn2%"=="N" goto main
+    if "%dwn2%"=="n" goto main
+) 
+if "%inp%"=="shtdwn" (
+    echo Are you sure? This will shutdown your PC ^(Y/N^)
+    set /p dwn3=
+    if "%dwn3%"=="Y" shutdown /t 0
+    if "%dwn3%"=="y" shutdown /t 0
+    if "%dwn3%"=="N" goto main
+    if "%dwn3%"=="n" goto main
+) 
 if "%inp%"=="signout" shutdown /l
 if "%inp%"=="sgnout" shutdown /l
 if "%inp%"=="logout" shutdown /l
 if "%inp%"=="lgout" shutdown /l
-if "%inp%"=="restart" shutdown /r /t 0 & pause & goto main
-if "%inp%"=="rstr" shutdown /r /t 0 & pause & goto main
-if "%inp%"=="rst" shutdown /r /t 0 & pause & goto main
+if "%inp%"=="restart" (
+    echo Are you sure? This will restart your PC ^(Y/N^)
+    set /p rtr=
+    if "%rtr%"=="Y" shutdown /r /t 0
+    if "%rtr%"=="y" shutdown /r /t 0
+    if "%rtr%"=="N" goto main
+    if "%rtr%"=="n" goto main
+) 
+if "%inp%"=="rstr" (
+    echo Are you sure? This will restart your PC ^(Y/N^)
+    set /p rtr1=
+    if "%rtr1%"=="Y" shutdown /r /t 0
+    if "%rtr1%"=="y" shutdown /r /t 0
+    if "%rtr1%"=="N" goto main
+    if "%rtr1%"=="n" goto main
+) 
+if "%inp%"=="rst" (
+    echo Are you sure? This will restart your PC ^(Y/N^)
+    set /p rtr2=
+    if "%rtr2%"=="Y" shutdown /r /t 0
+    if "%rtr2%"=="y" shutdown /r /t 0
+    if "%rtr2%"=="N" goto main
+    if "%rtr2%"=="n" goto main
+) 
 if "%inp%"=="hibernate" shutdown /h
 if "%inp%"=="hibrnte" shutdown /h
 if "%inp%"=="hbrnte" shutdown /h
@@ -146,6 +319,7 @@ if "!cmd!"=="open" (
         start "" "!arg!"
     ) else (
         echo %c%[33mB%c%[31mT%c%[0m: %c%[31mFile or folder not found in current directory%c%[0m
+        powershell -Command "& { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Error; $notify.Visible = $true; $notify.ShowBalloonTip(5000, 'Batch Tools', 'File or folder not found in current directory.', [System.Windows.Forms.ToolTipIcon]::Error); Start-Sleep -Seconds 1; $notify.Dispose() }"
     )
     pause
     goto main
@@ -271,7 +445,7 @@ goto main
 
 echo.
 echo Current %c%[33mB%c%[31mT%c%[0m version
-echo v0.0.2 alpha
+echo v!BT_VERSION! alpha
 
 echo Press any key to go back...
 pause >nul
@@ -283,7 +457,7 @@ cls
 echo.
 echo There can be typos. My english isin't the best
 echo.
-echo                         v0.0.2 alpha
+echo                         v!BT_VERSION! alpha
 echo.
 echo --------------------------------------------------------------------
 echo.
@@ -307,7 +481,7 @@ echo.
 echo Please star my project if you like it I put hard work
 echo https://github.com/TitasB2/Batch-Tools/
 echo.
-echo Made with %c%[31m♥%c%[0m by Titas
+echo Made with %c%[31m?%c%[0m by Titas
 echo Press any key to go back . . .
 pause >nul
 goto main
@@ -367,16 +541,19 @@ goto main
 
 :myip
 
-echo.
-echo Local IP (IPv4):
+echo Local IPv4:
 ipconfig | findstr /i "IPv4"
+
 echo.
-echo IPv6
+echo Local IPv6:
 ipconfig | findstr /i "IPv6"
-:: echo Public IP:
-:: curl -s ifconfig.me
-:: echo.
-:: echo.
+
+echo.
+echo Public IP:
+curl.exe -s https://api.ipify.org
+
+echo.
+echo.
 echo Press any key to go back . . .
 pause >nul
 goto main
