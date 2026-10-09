@@ -36,7 +36,7 @@ BT currently includes commands for:
 
 ## Installation
 
-1. Download or `BT.bat`.
+1. Download `BT.bat`.
 2. Place `BT.bat` in a folder of your choice.
 3. Double-click `BT.bat`, or open Command Prompt in that folder and run:
 
@@ -79,7 +79,7 @@ BT includes commands that can **immediately**:
 - Shut down or restart your computer
 - Delete temporary files
 
-Some commands are marked with `*` in the built-in `help` output. This means they were not fully tested in the current version (v0.0.1 alpha).
+Some commands are marked with `*` in the built-in `help` output. This means they were not fully tested in the current version.
 
 Use these commands only if you understand what they do. Avoid commands such as `logout`, `shutdown`, `restart`, `hibernate`, `lock`, `sleep`, and `cleanup` if you are unsure.
 
