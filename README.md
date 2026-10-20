@@ -1,6 +1,6 @@
 # Batch Tools (BT)
 
-> A small `command-line` toolbox made with Windows Batch.
+> A small `command-line (CLI)` toolbox made with Windows Batch.
 
 Batch Tools, or **BT**, is a `.bat` script that provides quick access to commonly used CMD commands and basic Windows system utilities through a simple command menu.
 
