@@ -46,7 +46,7 @@ BT.bat
 
 ## Usage
 
-When BT starts, type a command and press `Enter`.
+When BT starts, type a command and press `Enter`. For example:
 
 ```text
 C:\YourFolder\BT> help
@@ -54,7 +54,7 @@ C:\YourFolder\BT> help
 
 Use `help`, `h`, `?`, or `BT` to view the built-in command list.
 
-### Examples
+### Command examples
 
 ```text
 help
