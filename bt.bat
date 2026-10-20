@@ -1,16 +1,21 @@
 @echo off
 
+set "VERSION=0.0.4"
+
+echo Batch Tools Version %VERSION% alpha
+echo (c) All rights reserved.
+
 ::                                                    ____ _____ 
 ::                                                   | __ )_   _|
 ::                                                   |  _ \ | |  
 ::                                                   | |_) || |  
 ::                                                   |____/ |_|  
 
-title BT v0.0.3 alpha
+title BT v0.0.4 alpha
 
 :: There can be typos. My english isin't the best
 
-::                                                 v0.0.3 alpha
+::                                                 v0.0.4 alpha
 
 ::                    oo____oo_ooooooo_oo____oo___oooooooo_oo____oo_ooooooo_ooooooo___ooooooo_oo_
 ::                    oo____oo_oo______oo____oo______oo____oo____oo_oo______oo____oo__oo______oo_
@@ -42,33 +47,83 @@ REM %c%[34m   Dark blue
 REM %c%[35m   Purple
 REM %c%[36m   Light blue
 
+echo.
+echo LOADING... [----------]
+echo       enabledelayedexpansion
+
 setlocal enabledelayedexpansion
+
+echo            [==========]
+echo       enabledelayedexpansion
+echo.
+
+echo LOADING... [----------]
+echo       Unicode symbol handling
+
 :: Display symbols correctly
 chcp 65001 >nul
+
+echo            [==========]
+echo       Unicode symbol handling
+echo.
+
+echo LOADING... [----------]
+echo         variuble for colors
+
 :: Make a variuble for colors
 for /f %%a in ('echo prompt $E^| cmd') do set "c=%%a"
 
-echo LOADING... [          ]
+echo            [==========]
+echo         variuble for colors
+echo.
+
+echo LOADING... [----------]
 echo               bt.cfg
-powershell "Start-Sleep -Milliseconds 1"
 
-:: Load config if it exists
+powershell -NoProfile -Command ^
+  "$end = [Diagnostics.Stopwatch]::GetTimestamp() + [Diagnostics.Stopwatch]::Frequency / 2000; while ([Diagnostics.Stopwatch]::GetTimestamp() -lt $end) {}"
+
+:: ====================================================================
+
 set "CONFIG=%~dp0bt.cfg"
+set "FILES_DIR=%~dp0Files"
+set "COOKIE_SCRIPT=%FILES_DIR%\cookies-agreement.vbs"
+set "COOKIE_AGREE_TXT=%FILES_DIR%\DO_NOT_DELETE.txt"
+:: The xml files are a nightmare
+:: set "XML_FILE=%~dp0Files\bt.xml"
+set "BANNERS_XML=%~dp0Files\banners.xml"
 
-if exist "%CONFIG%" (
-    for /f "usebackq eol=# tokens=1,* delims==" %%A in ("%CONFIG%") do (
-        set "%%A=%%B"
-    )
-) else (
+if not exist "%CONFIG%" (
     echo %c%[31mConfig file not found%c%[0m: "%CONFIG%"
-    goto main
+    echo %c%[31mThe bt.cfg file is required to in the same directory as bt.bat is in%c%[0m
+    echo.
+    echo %c%[31mMake sure that the bt.cfg file is in the PATH of%c%[0m:
+    echo ...\BT\bt.cfg
+    echo.
+    echo Press any key to exit . . .
+    pause >nul
+    exit /b 1
 )
 
-if "!BT_VERSION!"=="0.0.3" (
+for /f "usebackq eol=# tokens=1,* delims==" %%A in ("%CONFIG%") do (
+    set "%%A=%%B"
+)
+
+if not exist "%FILES_DIR%\*" (
+    mkdir "%FILES_DIR%"
+)
+
+:: ========================================================================
+
+if "!BT_VERSION!"=="%VERSION%" (
     goto pass
 ) else (
+    echo.
     echo %c%[31mThe versions don't match from bt.cfg%c%[0m
-    echo %c%[31mPlease change it in bt.cfg to the current one. Or reinstall BT%c%[0m
+    echo %c%[31mPlease change it in bt.cfg to the current one. Or reinstall BT
+    echo.
+    echo Version writen in CFG: !BT_VERSION!
+    echo Current version: %VERSION%
     echo.
     echo %c%[31mSolution: change the version in bt.cfg to the current%c%[0m
     echo.
@@ -78,22 +133,21 @@ if "!BT_VERSION!"=="0.0.3" (
 )
 :pass
 
-echo            [==        ]
+echo            [==--------]
 echo               bt.cfg
 
 :: Defaults
 :: if not defined BT_USE_COLORS set "BT_USE_COLORS=1"
-:: if not defined BT_SKIN set "BT_SKIN=default"
 if not defined BT_PROMPT_SEP set "BT_PROMPT_SEP=>"
 :: if not defined BT_PROMPT_PREFIX set "BT_PROMPT_PREFIX="
 :: if not defined BT_START_DIR set "BT_START_DIR="
-echo            [====      ]
+echo            [====------]
 echo               bt.cfg
 
 :: Startup directory
 if defined BT_START_DIR cd /d "%BT_START_DIR%"
 
-echo            [======    ]
+echo            [======----]
 echo               bt.cfg
 powershell "Start-Sleep -Milliseconds 1"
 
@@ -128,36 +182,113 @@ powershell "Start-Sleep -Milliseconds 1"
 ::     set "color1="
 ::     set "color2="
 :: )
-echo LOADING... [==========]
+echo            [==========]
 echo               bt.cfg
 echo.
 powershell "Start-Sleep -Milliseconds 500"
 
-@echo off
+:: echo LOADING... [----------]
+:: echo               bt.xml
 
-echo LOADING... [          ]
+:: if exist "%XML_FILE%" (
+::     for /f "tokens=1,* delims==" %%A in ('
+::         powershell -NoProfile -Command "$xml = [xml](Get-Content -Raw -LiteralPath $env:XML_FILE); foreach ($setting in $xml.bt.setting) { Write-Output ($setting.name + '=' + $setting.value) }"
+::     ') do (
+::         set "%%A=%%B"
+::     )
+:: ) else (
+::     echo %c%[31mbt.xml file not found%c%[0m:
+::     echo "%XML_FILE%"
+::     echo %c%[31mMake sure that the bt.xml file is in the PATH of%c%[0m:
+::     echo ...\BT\Files\bt.xml\
+::     echo.
+::     echo Press any key to exit . . .
+::     pause >nul
+::     exit /b 1
+:: )
+
+:: echo            [----------]
+:: echo               bt.xml
+
+:: if not defined BT_VERSION_XML (
+::     echo.
+::     echo %c%[31mBT_VERSION_XML setting is missing from bt.xml.%c%[0m
+::     echo.
+::     echo Press any key to exit . . .
+::     pause >nul
+::     goto :exit
+:: )
+:: 
+:: echo            [=====-----]
+:: echo               bt.xml
+
+:: if "!BT_VERSION_XML!"=="!BT_VERSION!" (
+::    goto passxml
+:: ) else (
+::     echo.
+::     echo %c%[31mThe versions do not match from bt.xml.
+::     echo.
+::     echo Version written in XML: %BT_VERSION_XML%
+::     echo Current BT version: !BT_VERSION!
+::     echo.
+::     echo Please change the version in bt.xml to the current version, or reinstall BT.%c%[0m
+::     echo.
+::     echo Press any key to exit . . .
+::     pause >nul
+::     goto :exit
+:: )
+
+:: :passxml
+
+:: echo            [==========]
+:: echo               bt.xml
+
+echo LOADING... [----------]
 echo        cookies-agreement.vbs
 
 powershell "Start-Sleep -Milliseconds 15"
 
-wscript.exe "%~dp0\cookies-agreement.vbs"
+if not exist "%COOKIE_SCRIPT%" (
+    echo %c%[31mCookie agreement script not found%c%[0m:
+    echo "%COOKIE_SCRIPT%"
+    echo.
+    echo Press any key to continue . . .
+    pause >nul
+    goto skiploadcookie
+)
+
 echo            [==========]
 echo        cookies-agreement.vbs
 echo.
+
+wscript.exe "%~dp0Files\cookies-agreement.vbs"
+
+if errorlevel 1 (
+    echo %c%[31mAgreement declined. Agreement is required.%c%[0m
+    echo.
+    echo Press any key to exit . . .
+    pause >nul
+    exit /b 1
+)
+
 :: powershell "Start-Sleep -Milliseconds 1"
 
-echo LOADING... [          ]
+:skiploadcookie
+
+if not exist "%COOKIE_AGREE_TXT%" goto passNoCookie
+
+echo LOADING... [----------]
 echo          DO_NOT_DELETE.txt
 
 powershell "Start-Sleep -Milliseconds 1"
 
-if errorlevel 1 (
-    echo Cookie agreement declined.
-)
 echo            [==========]
 echo          DO_NOT_DELETE.txt
 
+:passNoCookie
 :: powershell "Start-Sleep -Milliseconds 1"
+
+goto finishloading
 
 echo Agreement accepted or already confirmed.
 
@@ -168,6 +299,8 @@ set "cmd="
 set "arg="
 
 cls
+
+:finishloading
 
 echo ===============================================
 echo.
@@ -189,8 +322,8 @@ if "%inp%"=="BT" goto help
 if "%inp%"=="bt" goto help 
 if "%inp%"=="h" goto help
 if "%inp%"=="?" goto help
-if "%inp%"=="cls" cls & pause & goto main
-if "%inp%"=="clear" cls & pause & goto main
+if "%inp%"=="cls" cls & goto main
+if "%inp%"=="clear" cls & goto main
 :: Got lazy here 
 REM if "%inp%"=="flushdns" ipconfig /flushdns || ( echo Something went wrong && pause ) & goto main
 if "%inp%"=="flushdns" ipconfig /flushdns & pause & goto main
@@ -368,6 +501,10 @@ goto main
 :help
 
 echo.
+echo ================================================== BT Commands ==================================================
+echo.
+
+echo.
 :: Help
 echo help/BT/bt/h/?: displays this help page
 
@@ -390,7 +527,7 @@ echo flushdns: deletes cashed dns
 echo ipconfig/ipcnfg: network information
 
 :: logout
-echo logout/lgout, signout/sgnout: sign out of current account*
+echo logout/lgout, signout/sgnout: sign out of current account
 
 :: lockpc
 echo lockpc/lock/lkpc/lk: locks your pc
@@ -478,10 +615,10 @@ echo Github account: https://github.com/TitasB2
 echo.
 echo Read README.md, go to https://github.com/TitasB2/Batch-Tools/ or contact me https://github.com/TitasB2/ for more information.
 echo.
-echo Please star my project if you like it I put hard work
+echo Please star my project if you like it. I put hard work into it
 echo https://github.com/TitasB2/Batch-Tools/
 echo.
-echo Made with %c%[31m?%c%[0m by Titas
+echo Made with %c%[31m^<3%c%[0m by Titas
 echo Press any key to go back . . .
 pause >nul
 goto main

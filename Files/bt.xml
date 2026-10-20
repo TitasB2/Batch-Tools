@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bt>
+  <settings>
+    <!-- =========== DON'T CHANGE THIS =========== -->
+    <setting name="BT_VERSION_XML" value="0.0.4" />
+    <!-- ========================================= -->
+    <setting name="BT_ADMIN_COMMAND" value="1" />
+  </settings>
+</bt>
