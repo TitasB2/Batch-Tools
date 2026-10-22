@@ -26,7 +26,7 @@ BT currently includes commands for:
 
 - Windows 10 or Windows 11 (recommended)
 - Command Prompt (`cmd.exe`)
-- No installation or extra software required
+- No other extra software required
 
 > The script is primarily tested on Windows 11.  
 > It may run on Windows 7/8/8.1, but:
@@ -36,8 +36,8 @@ BT currently includes commands for:
 
 ## Installation
 
-1. Download `BT.bat`.
-2. Place `BT.bat` in a folder of your choice.
+1. Download `BT.bat`, `bt.cfg` and the files in the `Files` folder like `cookies-agreement.vbs` and put them in the path just like it needs
+2. Place `BT.bat` and the other files in a folder of your choice.
 3. Double-click `BT.bat`, or open Command Prompt in that folder and run:
 
 ```bat
