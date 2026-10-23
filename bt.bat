@@ -545,6 +545,18 @@ echo ping /?: displays help for ping
 :: info
 echo info: displays all the information about BT
 
+:: diskspace
+echo diskspace: displays free and total space on local drives
+
+:: findfile
+echo findfile: searches a folder and its subfolders for matching file names*
+
+:: netcheck
+echo netcheck: tests DNS lookup and internet ping response
+
+:: timer
+echo timer: starts a countdown for a chosen number of seconds
+
 echo.
 echo %c%[31m^* - didin't test yet%c%[0m
 echo Press any key to go back . . .
