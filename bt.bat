@@ -2,8 +2,33 @@
 
 set "VERSION=0.0.4"
 
-echo Batch Tools Version %VERSION% alpha
-echo (c) All rights reserved.
+echo.
+echo LOADING... [----------]
+echo         start-selection.ps1
+
+set "FILES_DIR=%~dp0Files"
+set "START=%FILES_DIR%\start-selection.ps1"
+if not exist "%START%" (
+    echo Config file not found: "%START%"
+    echo The start-selection.ps1 file is required to in the same directory of Files.
+    echo.
+    echo Make sure that the start-selection.ps1 file is in the PATH of:
+    echo "%START%"
+    echo.
+    echo Press any key to exit . . .
+    pause >nul
+    exit /b 1
+)
+
+echo LOADING... [==========]
+echo         start-selection.ps1
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0Files\start-selection.ps1"
+
+if errorlevel 2 goto exit
+if errorlevel 1 goto 1
+
+:1
 
 ::                                                    ____ _____ 
 ::                                                   | __ )_   _|
@@ -86,12 +111,8 @@ powershell -NoProfile -Command ^
 :: ====================================================================
 
 set "CONFIG=%~dp0bt.cfg"
-set "FILES_DIR=%~dp0Files"
 set "COOKIE_SCRIPT=%FILES_DIR%\cookies-agreement.vbs"
 set "COOKIE_AGREE_TXT=%FILES_DIR%\DO_NOT_DELETE.txt"
-:: The xml files are a nightmare
-:: set "XML_FILE=%~dp0Files\bt.xml"
-set "BANNERS_XML=%~dp0Files\banners.xml"
 
 if not exist "%CONFIG%" (
     echo %c%[31mConfig file not found%c%[0m: "%CONFIG%"
@@ -140,7 +161,7 @@ echo               bt.cfg
 :: if not defined BT_USE_COLORS set "BT_USE_COLORS=1"
 if not defined BT_PROMPT_SEP set "BT_PROMPT_SEP=>"
 :: if not defined BT_PROMPT_PREFIX set "BT_PROMPT_PREFIX="
-:: if not defined BT_START_DIR set "BT_START_DIR="
+if not defined BT_START_DIR set "BT_START_DIR="
 echo            [====------]
 echo               bt.cfg
 
@@ -185,63 +206,8 @@ powershell "Start-Sleep -Milliseconds 1"
 echo            [==========]
 echo               bt.cfg
 echo.
+
 powershell "Start-Sleep -Milliseconds 500"
-
-:: echo LOADING... [----------]
-:: echo               bt.xml
-
-:: if exist "%XML_FILE%" (
-::     for /f "tokens=1,* delims==" %%A in ('
-::         powershell -NoProfile -Command "$xml = [xml](Get-Content -Raw -LiteralPath $env:XML_FILE); foreach ($setting in $xml.bt.setting) { Write-Output ($setting.name + '=' + $setting.value) }"
-::     ') do (
-::         set "%%A=%%B"
-::     )
-:: ) else (
-::     echo %c%[31mbt.xml file not found%c%[0m:
-::     echo "%XML_FILE%"
-::     echo %c%[31mMake sure that the bt.xml file is in the PATH of%c%[0m:
-::     echo ...\BT\Files\bt.xml\
-::     echo.
-::     echo Press any key to exit . . .
-::     pause >nul
-::     exit /b 1
-:: )
-
-:: echo            [----------]
-:: echo               bt.xml
-
-:: if not defined BT_VERSION_XML (
-::     echo.
-::     echo %c%[31mBT_VERSION_XML setting is missing from bt.xml.%c%[0m
-::     echo.
-::     echo Press any key to exit . . .
-::     pause >nul
-::     goto :exit
-:: )
-:: 
-:: echo            [=====-----]
-:: echo               bt.xml
-
-:: if "!BT_VERSION_XML!"=="!BT_VERSION!" (
-::    goto passxml
-:: ) else (
-::     echo.
-::     echo %c%[31mThe versions do not match from bt.xml.
-::     echo.
-::     echo Version written in XML: %BT_VERSION_XML%
-::     echo Current BT version: !BT_VERSION!
-::     echo.
-::     echo Please change the version in bt.xml to the current version, or reinstall BT.%c%[0m
-::     echo.
-::     echo Press any key to exit . . .
-::     pause >nul
-::     goto :exit
-:: )
-
-:: :passxml
-
-:: echo            [==========]
-:: echo               bt.xml
 
 echo LOADING... [----------]
 echo        cookies-agreement.vbs
@@ -302,6 +268,10 @@ cls
 
 :finishloading
 
+echo.
+echo Batch Tools Version %VERSION% alpha
+echo (c) All rights reserved.
+echo.
 echo ===============================================
 echo.
 echo                      %c%[33mB%c%[31mT%c%[0m
@@ -317,123 +287,127 @@ if "!BT_PROMPT_PREFIX!"=="" (
 set "promptText=!baseText!!BT_PROMPT_SEP! "
 set /p inp=!promptText!
 
-if "%inp%"=="help" goto help
-if "%inp%"=="BT" goto help
-if "%inp%"=="bt" goto help 
-if "%inp%"=="h" goto help
-if "%inp%"=="?" goto help
-if "%inp%"=="cls" cls & goto main
-if "%inp%"=="clear" cls & goto main
+if /i "%inp%"=="help" goto help
+if /i "%inp%"=="BT" goto help
+if /i "%inp%"=="bt" goto help 
+if /i "%inp%"=="h" goto help
+if /i "%inp%"=="?" goto help
+if /i "%inp%"=="cls" cls & goto main
+if /i "%inp%"=="clear" cls & goto main
 :: Got lazy here 
 REM if "%inp%"=="flushdns" ipconfig /flushdns || ( echo Something went wrong && pause ) & goto main
-if "%inp%"=="flushdns" ipconfig /flushdns & pause & goto main
-if "%inp%"=="ipconfig" goto ipconfig 
-if "%inp%"=="ipcnfg" goto ipconfig
-if "%inp%"=="exit" goto :exit
-if "%inp%"=="switchusers" tsdiscon
-if "%inp%"=="lock" rundll32.exe user32.dll,LockWorkStation & pause & goto main
-if "%inp%"=="lockpc" rundll32.exe user32.dll,LockWorkStation & pause & goto main
-if "%inp%"=="lkpc" rundll32.exe user32.dll,LockWorkStation & pause & goto main
-if "%inp%"=="lk" rundll32.exe user32.dll,LockWorkStation & pause & goto main
-if "%inp%"=="turnoff" (
+if /i "%inp%"=="flushdns" ipconfig /flushdns & pause & goto main
+if /i "%inp%"=="ipconfig" goto ipconfig 
+if /i "%inp%"=="ipcnfg" goto ipconfig
+if /i "%inp%"=="exit" goto :exit
+if /i "%inp%"=="switchusers" tsdiscon
+if /i "%inp%"=="lock" rundll32.exe user32.dll,LockWorkStation & pause & goto main
+if /i "%inp%"=="lockpc" rundll32.exe user32.dll,LockWorkStation & pause & goto main
+if /i "%inp%"=="lkpc" rundll32.exe user32.dll,LockWorkStation & pause & goto main
+if /i "%inp%"=="lk" rundll32.exe user32.dll,LockWorkStation & pause & goto main
+if /i "%inp%"=="turnoff" (
     echo Are you sure? This will shutdown your PC ^(Y/N^)
     set /p dwn=
     if "%dwn%"=="Y" shutdown /t 0
     if "%dwn%"=="y" shutdown /t 0
     if "%dwn%"=="N" goto main
     if "%dwn%"=="n" goto main
-) 
-if "%inp%"=="trnoff" (
+)  
+if /i "%inp%"=="trnoff" (
     echo Are you sure? This will shutdown your PC ^(Y/N^)
     set /p dwn1=
     if "%dwn1%"=="Y" shutdown /t 0
     if "%dwn1%"=="y" shutdown /t 0
     if "%dwn1%"=="N" goto main
     if "%dwn1%"=="n" goto main
-) 
-if "%inp%"=="shutdown" (
+)  
+if /i "%inp%"=="shutdown" (
     echo Are you sure? This will shutdown your PC ^(Y/N^)
     set /p dwn2=
     if "%dwn2%"=="Y" shutdown /t 0
     if "%dwn2%"=="y" shutdown /t 0
     if "%dwn2%"=="N" goto main
     if "%dwn2%"=="n" goto main
-) 
-if "%inp%"=="shtdwn" (
+)  
+if /i "%inp%"=="shtdwn" (
     echo Are you sure? This will shutdown your PC ^(Y/N^)
     set /p dwn3=
     if "%dwn3%"=="Y" shutdown /t 0
     if "%dwn3%"=="y" shutdown /t 0
     if "%dwn3%"=="N" goto main
     if "%dwn3%"=="n" goto main
-) 
-if "%inp%"=="signout" shutdown /l
-if "%inp%"=="sgnout" shutdown /l
-if "%inp%"=="logout" shutdown /l
-if "%inp%"=="lgout" shutdown /l
-if "%inp%"=="restart" (
+)  
+if /i "%inp%"=="signout" shutdown /l
+if /i "%inp%"=="sgnout" shutdown /l
+if /i "%inp%"=="logout" shutdown /l
+if /i "%inp%"=="lgout" shutdown /l
+if /i "%inp%"=="restart" (
     echo Are you sure? This will restart your PC ^(Y/N^)
     set /p rtr=
     if "%rtr%"=="Y" shutdown /r /t 0
     if "%rtr%"=="y" shutdown /r /t 0
     if "%rtr%"=="N" goto main
     if "%rtr%"=="n" goto main
-) 
-if "%inp%"=="rstr" (
+)  
+if /i "%inp%"=="rstr" (
     echo Are you sure? This will restart your PC ^(Y/N^)
     set /p rtr1=
     if "%rtr1%"=="Y" shutdown /r /t 0
     if "%rtr1%"=="y" shutdown /r /t 0
     if "%rtr1%"=="N" goto main
     if "%rtr1%"=="n" goto main
-) 
-if "%inp%"=="rst" (
-    echo Are you sure? This will restart your PC ^(Y/N^)
-    set /p rtr2=
+)  
+if /i "%inp%"=="rst" (
+echo Are you sure? This will restart your PC ^(Y/N^)
+set /p rtr2=
     if "%rtr2%"=="Y" shutdown /r /t 0
     if "%rtr2%"=="y" shutdown /r /t 0
     if "%rtr2%"=="N" goto main
     if "%rtr2%"=="n" goto main
-) 
-if "%inp%"=="hibernate" shutdown /h
-if "%inp%"=="hibrnte" shutdown /h
-if "%inp%"=="hbrnte" shutdown /h
-if "%inp%"=="bt --version" goto version
-if "%inp%"=="BT --version" goto version
-if "%inp%"=="bt --v" goto version
-if "%inp%"=="BT --v" goto version
-if "%inp%"=="cleanup" goto cleanup
-if "%inp%"=="clnup" goto cleanup
-if "%inp%"=="clnp" goto cleanup
-if "%inp%"=="clean" goto cleanup
-if "%inp%"=="cln" goto cleanup
-if "%inp%"=="myip" goto myip
-if "%inp%"=="mip" goto myip
-if "%inp%"=="ip" goto myip
-if "%inp%"=="sleep" rundll32.exe powrprof.dll,SetSuspendState 0,1,0 & pause & goto main
-if "%inp%"=="slp" rundll32.exe powrprof.dll,SetSuspendState 0,1,0 & pause & goto main
-if "%inp%"=="uptime" net stats workstation | find "since" & pause & goto main
-if "%inp%"=="uptme" net stats workstation | find "since" & pause & goto main
-if "%inp%"=="ptime" net stats workstation | find "since" & pause & goto main
-if "%inp%"=="ptme" net stats workstation | find "since" & pause & goto main
-if "%inp%"=="whoami" whoami /all & pause & goto main
-if "%inp%"=="whomi" whoami /all & pause & goto main
-if "%inp%"=="whmi" whoami /all & pause & goto main
-if "%inp%"=="wmi" whoami /all & pause & goto main
-if "%inp%"=="dir" dir & pause & goto main
-if "%inp%"=="dir /d" dir /d & pause & goto main
-if "%inp%"=="dir /w" dir /w & pause & goto main
-if "%inp%"=="dir /?" goto dir?
-if "%inp%"=="systeminfo" systeminfo & pause & goto main
-if "%inp%"=="sysinf" systeminfo & pause & goto main
-if "%inp%"=="sinf" systeminfo & pause & goto main
-if "%inp%"=="ping" goto :ping
-if "%inp%"=="ping -f" goto :ping
-if "%inp%"=="ping -n" goto ping-n
-if "%inp%"=="ping -6" goto ping6
-if "%inp%"=="ping -4" goto ping4
-if "%inp%"=="ping /?" goto ping?
-if "%inp%"=="info" goto info
+)  
+if /i "%inp%"=="hibernate" shutdown /h
+if /i "%inp%"=="hibrnte" shutdown /h
+if /i "%inp%"=="hbrnte" shutdown /h
+if /i "%inp%"=="bt --version" goto version
+if /i "%inp%"=="BT --version" goto version
+if /i "%inp%"=="bt --v" goto version
+if /i "%inp%"=="BT --v" goto version
+if /i "%inp%"=="cleanup" goto cleanup
+if /i "%inp%"=="clnup" goto cleanup
+if /i "%inp%"=="clnp" goto cleanup
+if /i "%inp%"=="clean" goto cleanup
+if /i "%inp%"=="cln" goto cleanup
+if /i "%inp%"=="myip" goto myip
+if /i "%inp%"=="mip" goto myip
+if /i "%inp%"=="ip" goto myip
+if /i "%inp%"=="sleep" rundll32.exe powrprof.dll,SetSuspendState 0,1,0 & pause & goto main
+if /i "%inp%"=="slp" rundll32.exe powrprof.dll,SetSuspendState 0,1,0 & pause & goto main
+if /i "%inp%"=="uptime" net stats workstation | find "since" & pause & goto main
+if /i "%inp%"=="uptme" net stats workstation | find "since" & pause & goto main
+if /i "%inp%"=="ptime" net stats workstation | find "since" & pause & goto main
+if /i "%inp%"=="ptme" net stats workstation | find "since" & pause & goto main
+if /i "%inp%"=="whoami" whoami /all & pause & goto main
+if /i "%inp%"=="whomi" whoami /all & pause & goto main
+if /i "%inp%"=="whmi" whoami /all & pause & goto main
+if /i "%inp%"=="wmi" whoami /all & pause & goto main
+if /i "%inp%"=="dir" dir & pause & goto main
+if /i "%inp%"=="dir /d" dir /d & pause & goto main
+if /i "%inp%"=="dir /w" dir /w & pause & goto main
+if /i "%inp%"=="dir /?" goto dir?
+if /i "%inp%"=="systeminfo" systeminfo & pause & goto main
+if /i "%inp%"=="sysinf" systeminfo & pause & goto main
+if /i "%inp%"=="sinf" systeminfo & pause & goto main
+if /i "%inp%"=="ping" goto :ping
+if /i "%inp%"=="ping -f" goto :ping
+if /i "%inp%"=="ping -n" goto ping-n
+if /i "%inp%"=="ping -6" goto ping6
+if /i "%inp%"=="ping -4" goto ping4
+if /i "%inp%"=="ping /?" goto ping?
+if /i "%inp%"=="info" goto info
+if /i "%inp%"=="diskspace" goto diskspace
+if /i "%inp%"=="findfile" goto findfile
+if /i "%inp%"=="netcheck" goto netcheck
+if /i "%inp%"=="timer" goto timer
 :: if "%inp%"=="speedtest" speedtest & pause & goto main
 :: if "%inp%"=="spdtest" speedtest & pause & goto main
 :: if "%inp%"=="spdtst" speedtest & pause & goto main
@@ -769,6 +743,81 @@ echo  -6        Force using IPv6.
 
 echo Press any key to go back . . .
 pause
+goto main
+
+:diskspace
+powershell.exe -NoProfile -Command "Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | ForEach-Object { '{0}: {1:N1} GB free of {2:N1} GB' -f $_.DeviceID, ($_.FreeSpace / 1GB), ($_.Size / 1GB) }"
+echo.
+
+echo Press any key to go back . . .
+pause >nul
+goto main
+
+:findfile
+set "searchName="
+set /p "searchName=File name or part of name: "
+if not defined searchName (
+    echo Please enter a name.
+    goto main
+)
+
+set "searchPath="
+set /p "searchPath=Folder to search (Enter for current folder): "
+if not defined searchPath set "searchPath=%CD%"
+
+if not exist "%searchPath%" (
+    echo Folder not found.
+    pause
+    goto main
+)
+
+where /r "%searchPath%" "*%searchName%*" 2>nul
+if errorlevel 1 echo No matching files found.
+echo.
+
+echo Press any key to go back . . .
+pause >nul
+goto main
+
+:netcheck
+echo DNS lookup test:
+nslookup example.com
+
+echo.
+echo Internet ping test:
+ping -n 1 -w 2000 1.1.1.1
+echo.
+
+echo Press any key to go back . . .
+pause >nul
+goto main
+
+:timer
+set "seconds="
+set /p "seconds=How many seconds? (1-99999): "
+
+if not defined seconds goto main
+
+set "invalid="
+for /f "delims=0123456789" %%A in ("%seconds%") do set "invalid=1"
+if defined invalid (
+    echo Please enter digits only.
+    pause
+    goto main
+)
+
+timeout /t %seconds% /nobreak
+if errorlevel 1 (
+    echo Timer failed. Use a number from 1 to 99999.
+    pause
+    goto main
+)
+
+echo Time's up!
+echo.
+
+echo Press any key to go back . . .
+pause >nul
 goto main
 
 :exit
